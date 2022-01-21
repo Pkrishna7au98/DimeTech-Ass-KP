@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+
+    {% for message in get_flashed_messages() %}
+    <p>{{ message }}</p>
+{% endfor %}
+    <div class="container">
+        <div class="row mt-5">
+            <form action="{{url_for('uploadFiles')}}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                  <label for="exampleFormControlFile1"><h2>Upload your file here</h2></label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                </div>
+                <button class="btn btn-sm btn-success mt-1" type="submit">Upload File</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <h3 class="mt-2">Select a Date Range</h3>
+        <div class="row">
+            <form action="{{url_for('results')}}" method="post">
+                <input type="date" name="stdate" id="stdate" min="2021-04-10" max="2021-10-25">
+                <input type="date" name="fndate" id="fndate" min="2021-04-10" max="2021-10-25" class="ml-4">
+                <button class="btn btn-sm btn-success ml-4" type="click"> View report</button>
+            </form>
+        </div>
+        {% if objdata %}
+        <div class="row" class="filterdata">
+
+            <div class="container">
+                <div class="row mt-4 mb-4">
+                    <h6>The data form {{stDate}} to {{fnDate}} is as shown below</h6>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-responsive">
+                        <thead>
+                            <th>Sr No.</th>
+                            <th>image_name</th>
+                            <th>objects_detected</th>
+                            <th>timestamp</th>
+                            <th>Image</th>
+                        </thead>
+
+                        <tbody>
+                            {% for key in objdata %}
+                            <tr>
+                                <td>{{key['id']}}</td>
+                                <td>{{key['image_name']}}</td>
+                                <td>{{key['objects_detected']}}</td>
+                                <td>{{key['timestamp']}}</td>
+
+                                <td><img src="{{ url_for('static', filename='images/' + key['image_name'] ) }}" height="180px" width="150px" alt=""></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</html>
